@@ -317,7 +317,7 @@ func (h *handler) apiDeleteBookmark(w http.ResponseWriter, r *http.Request, ps h
 		os.Remove(archivePath)
 	}
 
-	fmt.Fprint(w, 1)
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // apiUpdateBookmark is handler for PUT /api/bookmarks
@@ -695,5 +695,5 @@ func (h *handler) apiDeleteAccount(w http.ResponseWriter, r *http.Request, ps ht
 		}
 	}
 
-	fmt.Fprint(w, 1)
+	w.WriteHeader(http.StatusNoContent)
 }
