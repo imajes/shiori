@@ -243,6 +243,10 @@ func (h *handler) apiInsertBookmark(w http.ResponseWriter, r *http.Request, ps h
 	err = json.NewDecoder(r.Body).Decode(&book)
 	checkError(err)
 
+	// Retain the user-supplied title and excerpt
+	userTitle := book.Title
+	userExcerpt := book.Excerpt
+
 	// Create bookmark ID
 	book.ID, err = h.DB.CreateNewID("bookmark")
 	if err != nil {
@@ -274,9 +278,12 @@ func (h *handler) apiInsertBookmark(w http.ResponseWriter, r *http.Request, ps h
 		}
 	}
 
-	// Make sure bookmark's title not empty
-	if book.Title == "" {
-		book.Title = book.URL
+	// Use the user-supplied title and excerpt if they exist
+	if userExcerpt != "" {
+		book.Excerpt = userExcerpt
+	}
+	if userTitle != "" {
+		book.Title = userTitle
 	}
 
 	// Save bookmark to database
